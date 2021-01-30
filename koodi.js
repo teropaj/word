@@ -1,3 +1,4 @@
+let db=new Localbase()
 const mediat = []
 const apu = document.querySelector('#apu')
 jQuery(document).ready(function () {
@@ -65,20 +66,28 @@ jQuery(document).ready(function () {
                      listObject.append(holderObject);
 
                      //mediat.push(blob)
-                     let a=new FileReader()
-                     a.readAsDataURL(blob)
-                     localStorage.setItem('A'+localStorage.length,a.result)
-                     apu.innerHTML=localStorage.getItem('A'+localStorage.length)
+                     let reader=new FileReader()
+
+                     reader.onload = (event) => {
+                        localStorage.setItem('A'+localStorage.length, event.target.result);
+                      }
+                    
+
+                     reader.readAsDataURL(blob)
+                     //var blobkStringifyed=a.result
+                     //apu.innerText=blobkStringifyed
+                     //localStorage.setItem('A'+localStorage.length,blobkStringifyed)
+                     //apu.innerHTML=localStorage.getItem('A'+localStorage.length)
 
                      console.log('url ',url)
                      console.log('media lisätty')
                  });
              }
          }
-     let fReader=new FileReader()
-     console.log('Media Reader')
-     fReader.readAsDataURL(mediat[length-1])
-     localStorage.setItem(wavHelper,fReader.result)
+    //  let fReader=new FileReader()
+    //  console.log('Media Reader')
+    //  fReader.readAsDataURL(mediat[length-1])
+    //  localStorage.setItem(wavHelper,fReader.result)
      
      
      
@@ -117,12 +126,12 @@ for (keyy of locKeys) {
  liHelper=document.createElement('li')
  //liHelper.innerHTML=key
 
- aHelper=document.createElement('a')
+ buttonHelper=document.createElement('button')
  var link = document.createTextNode(keyy); 
- aHelper.appendChild(link); 
- aHelper.href=localStorage.getItem(keyy)
+ buttonHelper.appendChild(link); 
+ buttonHelper.onclick=function () {soita (localStorage.keyy)}
 
- liHelper.appendChild(aHelper)
+ liHelper.appendChild(buttonHelper)
 
 // liHelper.append(aHelper)
  console.log('228')
@@ -132,10 +141,11 @@ for (keyy of locKeys) {
 }
 function clearLocalStorage () {localStorage.clear();console.log('muisti tyhjennetty')}
 function soita(linkki) {
- const audio=document.createElement('audio')
- audio.src=linkki
- console.log(audio.src)
- audio.play()
+    console.log('oli täällä')
+    const audio=document.createElement('audio')
+    audio.src=linkki
+    console.log(audio.src)
+    audio.play()
 
 
 
