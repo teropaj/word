@@ -1,5 +1,16 @@
+ 
 let db=new Localbase()
+var dexie = new Dexie("friend_database");
+ 
+dexie.version(1).stores({
+    friends: '++id,name,shoeSize,blob',
+     
+});
+ 
+
+var BLOB
 const mediat = []
+var audioFile
 const apu = document.querySelector('#apu')
 jQuery(document).ready(function () {
  var $ = jQuery;
@@ -41,6 +52,8 @@ jQuery(document).ready(function () {
                      && listObject.length > 0) {
                  // Export the WAV file
                  myRecorder.objects.recorder.exportWAV(function (blob) {
+
+                     BLOB=blob
                      var url = (window.URL || window.webkitURL)
                              .createObjectURL(blob);
      //debugger
@@ -81,6 +94,18 @@ jQuery(document).ready(function () {
 
                      console.log('url ',url)
                      console.log('media lisätty')
+                     console.log('*******Blob************')
+                        db.collection('users').add({id:"uusi",blob: blob})
+                     console.log('*******Blob************')
+                     dexie.friends.put({blob: blob}).then (function(){     
+                        //
+                        // Then when data is stored, read from it
+                        //
+                        //return dexie.friends.get('Nicolas');
+                        console.log('blobk added')
+                    }).catch( e=> alert(e))
+
+
                  });
              }
          }
@@ -150,4 +175,39 @@ function soita(linkki) {
 
 
 }
+function getBlob() {
+    audio2 = document.createElement('audio');
+    var aani
+    db.collection('users').doc({ id: "uusi" }).get().then(document => {
+        
+         
+        return document.blob
+        console.log('aani blobiin')
+      })
+      audio2.src=aani
+      audio2.play()
+}
+function testi() {console.log('testi')}
 
+function saveDexie () {
+    dexie.friends.put({name: "Nicolas", shoeSize: 8}).then (function(){     
+        //
+        // Then when data is stored, read from it
+        //
+        return dexie.friends.get('Nicolas');
+    })
+}
+
+function saveBlob () {
+    dexie.friends.put({
+        name: "TERO"
+        ,
+        shoeSize: 3,
+        blob: BLOB}).then (function(){     
+        //
+        // Then when data is stored, read from it
+        console.log('Blob saved')
+
+        dexie.friends.get('blob');
+    })
+}
