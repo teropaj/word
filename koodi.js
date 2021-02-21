@@ -10,7 +10,7 @@ dexie.version(1).stores({
 
 var BLOB
 const mediat = []
-var audioFile
+var audioFile,tallenteita
 const apu = document.querySelector('#apu')
 jQuery(document).ready(function () {
  var $ = jQuery;
@@ -56,6 +56,14 @@ jQuery(document).ready(function () {
                      BLOB=blob
                      var url = (window.URL || window.webkitURL)
                              .createObjectURL(blob);
+
+                    dexie.friends.put({blob: blob}).then (function(){     
+                                //
+                                // Then when data is stored, read from it
+                                //
+                                //return dexie.friends.get('Nicolas');
+                                console.log('blobk added')
+                    }).catch( e=> alert(e))
      //debugger
 
                      // Prepare the playback
@@ -78,15 +86,15 @@ jQuery(document).ready(function () {
                      // Append to the list
                      listObject.append(holderObject);
 
-                     //mediat.push(blob)
-                     let reader=new FileReader()
+                    //  //mediat.push(blob)
+                    //  let reader=new FileReader()
 
-                     reader.onload = (event) => {
-                        localStorage.setItem('A'+localStorage.length, event.target.result);
-                      }
+                    //  reader.onload = (event) => {
+                    //     localStorage.setItem('A'+localStorage.length, event.target.result);
+                    //   }
                     
 
-                     reader.readAsDataURL(blob)
+                    //  reader.readAsDataURL(blob)
                      //var blobkStringifyed=a.result
                      //apu.innerText=blobkStringifyed
                      //localStorage.setItem('A'+localStorage.length,blobkStringifyed)
@@ -97,13 +105,7 @@ jQuery(document).ready(function () {
                      console.log('*******Blob************')
                         db.collection('users').add({id:"uusi",blob: blob})
                      console.log('*******Blob************')
-                     dexie.friends.put({blob: blob}).then (function(){     
-                        //
-                        // Then when data is stored, read from it
-                        //
-                        //return dexie.friends.get('Nicolas');
-                        console.log('blobk added')
-                    }).catch( e=> alert(e))
+                      
 
 
                  });
@@ -145,7 +147,22 @@ jQuery(document).ready(function () {
 console.log('was here')
 ulRecords=document.querySelector('#ulList')
 var locKeys=Object.keys(localStorage)
-for (keyy of locKeys) {
+records=dexie.friends.toArray()
+setTimeout(() =>{console.log('timeout ',records._value.length);apu.innerHTML=''+records._value.length;
+tallenteita= records._value.length
+console.log()},500)
+//console.log(records._value.length)
+console.log('149   '+typeof records._value)
+//console.log(`${records._value.length}`);
+//apu.innerHTML=''+records._value.length
+//tallenteita= records._value.length
+console.log('tallenteita ',tallenteita)
+//apu.innerHTML=''+tallenteita._value.length
+//if (typeof records._value.length ==="number") {console.log('Number');tallenteita=records._value.length}
+for (i=0;i<tallenteita;i++) {
+    console.log(records._value[i])
+}
+for (keyy of records._value) {
  console.log( keyy)
  
  liHelper=document.createElement('li')
