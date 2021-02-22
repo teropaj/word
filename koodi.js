@@ -10,7 +10,7 @@ dexie.version(1).stores({
 
 var BLOB
 const mediat = []
-var audioFile,tallenteita
+let  audioFile,records=[],tallenteita
 const apu = document.querySelector('#apu')
 jQuery(document).ready(function () {
  var $ = jQuery;
@@ -63,7 +63,8 @@ jQuery(document).ready(function () {
                                 //
                                 //return dexie.friends.get('Nicolas');
                                 console.log('blobk added')
-                    }).catch( e=> alert(e))
+                    }).catch( e=> console.log(e)//alert('Dexi alert '+e)
+                    )
      //debugger
 
                      // Prepare the playback
@@ -147,45 +148,67 @@ jQuery(document).ready(function () {
 console.log('was here')
 ulRecords=document.querySelector('#ulList')
 var locKeys=Object.keys(localStorage)
-records=dexie.friends.toArray()
-setTimeout(() =>{console.log('timeout ',records._value.length);apu.innerHTML=''+records._value.length;
-tallenteita= records._value.length
-console.log()},500)
-//console.log(records._value.length)
-console.log('149   '+typeof records._value)
+
+haeTallenteet()
+
+
+//apu.innerHTML=''+records._value[0].id;
+//tallenteita= records._value.length
+
+async function haeTallenteet () {
+    await dexie.friends.toArray().then(e=>{
+         
+        records=e
+        apu.innerHTML='valmis'+records[2].id;
+        })
+        .catch(e=>alert(e))
+}
+
+
+
+ 
+console.log('',records)
+// console.log('149   '+typeof records._value)
 //console.log(`${records._value.length}`);
 //apu.innerHTML=''+records._value.length
-//tallenteita= records._value.length
-console.log('tallenteita ',tallenteita)
+console.log(records)
+//tallenteita= records.length
+//console.log('tallenteita ',tallenteita)
 //apu.innerHTML=''+tallenteita._value.length
 //if (typeof records._value.length ==="number") {console.log('Number');tallenteita=records._value.length}
-for (i=0;i<tallenteita;i++) {
-    console.log(records._value[i])
-}
-for (keyy of records._value) {
- console.log( keyy)
+// for (i=0;i<tallenteita;i++) {
+//     console.log(records._value[i])
+// }
+//tallenteita=records._value.length
+// for (i=0;i<records._value.length;i++) {
+    
+//     console.log(records._value[i])
+// }
+
+// for (keyy of records._value) {
+//  console.log( keyy)
  
- liHelper=document.createElement('li')
- //liHelper.innerHTML=key
+//  liHelper=document.createElement('li')
+//  //liHelper.innerHTML=key
 
- buttonHelper=document.createElement('button')
- var link = document.createTextNode(keyy); 
- buttonHelper.appendChild(link); 
- buttonHelper.onclick=function () {soita (localStorage.keyy)}
+//  buttonHelper=document.createElement('button')
+//  var link = document.createTextNode(keyy); 
+//  buttonHelper.appendChild(link); 
+//  buttonHelper.onclick=function () {soita (key.blob)}
 
- liHelper.appendChild(buttonHelper)
+//  liHelper.appendChild(buttonHelper)
 
-// liHelper.append(aHelper)
- console.log('228')
- ulRecords.append(liHelper)
- console.log('lop')
+// // liHelper.append(aHelper)
+//  console.log('228')
+//  ulRecords.append(liHelper)
+//  console.log('lop')
 
-}
+// }
 function clearLocalStorage () {localStorage.clear();console.log('muisti tyhjennetty')}
 function soita(linkki) {
     console.log('oli täällä')
     const audio=document.createElement('audio')
-    audio.src=linkki
+    audio.src=URL.toUTCString(linkki)
     console.log(audio.src)
     audio.play()
 
