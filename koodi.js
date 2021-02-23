@@ -63,7 +63,7 @@ jQuery(document).ready(function () {
                                 //
                                 //return dexie.friends.get('Nicolas');
                                 console.log('blobk added')
-                    }).catch( e=> console.log(e)//alert('Dexi alert '+e)
+                    }).catch( e=> {console.log(e);alert('Dexi alert '+e)}
                     )
      //debugger
 
@@ -155,11 +155,13 @@ haeTallenteet()
 //apu.innerHTML=''+records._value[0].id;
 //tallenteita= records._value.length
 
-async function haeTallenteet () {
-    await dexie.friends.toArray().then(e=>{
+function haeTallenteet () {
+     dexie.friends.toArray().then(e=>{
          
         records=e
         apu.innerHTML='valmis'+records[2].id;
+        console.log('records ',records )
+        listaaTallenteet()
         })
         .catch(e=>alert(e))
 }
@@ -184,31 +186,35 @@ console.log(records)
     
 //     console.log(records._value[i])
 // }
-
-// for (keyy of records._value) {
-//  console.log( keyy)
+console.log('records ',records)
+function listaaTallenteet () {
+    for (keyy of records) {
+        console.log( keyy.id)
+        console.log('190')
+        liHelper=document.createElement('li')
+        //liHelper.innerHTML=key
+       
+        buttonHelper=document.createElement('button')
+        var link = document.createTextNode(keyy.id); 
+        buttonHelper.appendChild(link); 
+        buttonHelper.onclick=function () {soita (keyy.blob)}
+       
+        liHelper.appendChild(buttonHelper)
+       
+       // liHelper.append(aHelper)
+        console.log('228')
+        ulRecords.append(liHelper)
+        console.log('lop')
+        lisaaLog(ulRecords)
+       }
+}
  
-//  liHelper=document.createElement('li')
-//  //liHelper.innerHTML=key
-
-//  buttonHelper=document.createElement('button')
-//  var link = document.createTextNode(keyy); 
-//  buttonHelper.appendChild(link); 
-//  buttonHelper.onclick=function () {soita (key.blob)}
-
-//  liHelper.appendChild(buttonHelper)
-
-// // liHelper.append(aHelper)
-//  console.log('228')
-//  ulRecords.append(liHelper)
-//  console.log('lop')
-
-// }
 function clearLocalStorage () {localStorage.clear();console.log('muisti tyhjennetty')}
 function soita(linkki) {
     console.log('oli täällä')
     const audio=document.createElement('audio')
-    audio.src=URL.toUTCString(linkki)
+    //audio.src=URL.toUTCString(linkki)
+    audio.src=URL.createObjectURL(linkki)
     console.log(audio.src)
     audio.play()
 
@@ -220,9 +226,9 @@ function getBlob() {
     var aani
     db.collection('users').doc({ id: "uusi" }).get().then(document => {
         
-         
+         //console.log('aani blobiin')
         return document.blob
-        console.log('aani blobiin')
+         
       })
       audio2.src=aani
       audio2.play()
@@ -251,3 +257,4 @@ function saveBlob () {
         dexie.friends.get('blob');
     })
 }
+function lisaaLog (mes) {apu.innerHTML+=mes}
