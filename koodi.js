@@ -1,7 +1,7 @@
  
 let db=new Localbase()
 var dexie = new Dexie("friend_database");
- 
+var recording=false
 dexie.version(1).stores({
     friends: '++id,name,shoeSize,blob',
      
@@ -147,7 +147,7 @@ jQuery(document).ready(function () {
 
 console.log('was here')
 ulRecords=document.querySelector('#ulList')
-var locKeys=Object.keys(localStorage)
+//var locKeys=Object.keys(localStorage)
 
 haeTallenteet()
 
@@ -159,11 +159,11 @@ function haeTallenteet () {
      dexie.friends.toArray().then(e=>{
          
         records=e
-        apu.innerHTML='valmis'+records[2].id;
+        //apu.innerHTML='valmis'+records[2].id;
         console.log('records ',records )
         listaaTallenteet()
         })
-        .catch(e=>alert(e))
+        .catch(e=>alert('hae tallenteet ',e))
 }
 
 
@@ -205,7 +205,7 @@ function listaaTallenteet () {
         console.log('228')
         ulRecords.append(liHelper)
         console.log('lop')
-        lisaaLog(ulRecords)
+        //lisaaLog(ulRecords)
        }
 }
  
@@ -258,3 +258,10 @@ function saveBlob () {
     })
 }
 function lisaaLog (mes) {apu.innerHTML+=mes}
+
+function tallenna() {
+    if (recording) { console.log('tallentaa');recording=false}
+    else {//myRecorder.start();
+        console.log('ei tallenna');recording=true}
+}
+ 
