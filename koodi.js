@@ -161,7 +161,8 @@ function haeTallenteet () {
         records=e
         //apu.innerHTML='valmis'+records[2].id;
         console.log('records ',records )
-        listaaTallenteet()
+        //listaaTallenteet()
+        listaaTallenteet2()
         })
         .catch(e=>alert('hae tallenteet ',e))
 }
@@ -187,7 +188,28 @@ console.log(records)
 //     console.log(records._value[i])
 // }
 console.log('records ',records)
-function listaaTallenteet () {
+// function listaaTallenteet () {
+//     for (keyy of records) {
+//         console.log( keyy.id)
+//         console.log('190')
+//         liHelper=document.createElement('li')
+//         //liHelper.innerHTML=key
+       
+//         buttonHelper=document.createElement('button')
+//         var link = document.createTextNode(keyy.id); 
+//         buttonHelper.appendChild(link); 
+//         buttonHelper.onclick=function () {soita (keyy.blob)}
+       
+//         liHelper.appendChild(buttonHelper)
+       
+//        // liHelper.append(aHelper)
+//         console.log('228')
+//         ulRecords.append(liHelper)
+//         console.log('lop')
+//         //lisaaLog(ulRecords)
+//        }
+// }
+function listaaTallenteet2 () {
     for (keyy of records) {
         console.log( keyy.id)
         console.log('190')
@@ -195,11 +217,11 @@ function listaaTallenteet () {
         //liHelper.innerHTML=key
        
         buttonHelper=document.createElement('button')
-        var link = document.createTextNode(keyy.id); 
+        var link = document.createTextNode(keyy.id+'joo'); 
         buttonHelper.appendChild(link); 
         buttonHelper.onclick=function () {soita (keyy.blob)}
-       
-        liHelper.appendChild(buttonHelper)
+        buttonHelper.classList.add("mystyle");
+        ulRecords.appendChild(buttonHelper)
        
        // liHelper.append(aHelper)
         console.log('228')
