@@ -2,6 +2,8 @@
 let db=new Localbase()
 var dexie = new Dexie("friend_database");
 var recording=false
+var tallennusaika=1000
+
 dexie.version(1).stores({
     friends: '++id,name,shoeSize,blob',
      
@@ -14,6 +16,7 @@ let  audioFile,records=[],tallenteita
 const apu = document.querySelector('#apu')
 jQuery(document).ready(function () {
  var $ = jQuery;
+ 
  var myRecorder = {
      objects: {
          context: null,
@@ -37,6 +40,25 @@ jQuery(document).ready(function () {
                      {numChannels: 1}
              );
              myRecorder.objects.recorder.record();
+             setTimeout(function () {
+                $('#tallenna').click()
+                  console.log('pysähtyi')
+                },tallennusaika)
+                var progressbar="eka"
+                const elem = document.getElementById(progressbar);
+                let width = 0;
+                const id = setInterval(() => {
+                  if (width >= 100) {
+                    clearInterval(id);
+                    document.querySelector('#tallenna').textContent="toka"
+                  } else {
+                    const timeTOStopInSec = 1;
+                    width += 1 / timeTOStopInSec;
+                    elem.value = width;
+                  }
+                }, 10);
+
+
          }).catch(function (err) {});
      },
      stop: function (listObject) {
@@ -127,7 +149,10 @@ jQuery(document).ready(function () {
 
 
  // Prepare the record button
- $('[data-role="controls"] > button').click(function () {
+ $('[data-role="controls"] > button').click(tallenna)
+ $('#tallenna').click(tallenna)
+     
+ function tallenna() {
      // Initialize the recorder
      myRecorder.init();
 
@@ -142,7 +167,7 @@ jQuery(document).ready(function () {
          $(this).attr('data-recording', '');
          myRecorder.stop(listObject);
      }
- });
+ };
 });
 
 console.log('was here')
@@ -281,9 +306,9 @@ function saveBlob () {
 }
 function lisaaLog (mes) {apu.innerHTML+=mes}
 
-function tallenna() {
-    if (recording) { console.log('tallentaa');recording=false}
-    else {//myRecorder.start();
-        console.log('ei tallenna');recording=true}
-}
+// function tallenna() {
+//     if (recording) { console.log('tallentaa');recording=false}
+//     else {//myRecorder.start();
+//         console.log('ei tallenna');recording=true}
+// }
  
