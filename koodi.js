@@ -3,9 +3,9 @@ let db=new Localbase()
 var dexie = new Dexie("friend_database");
 var recording=false
 var tallennusaika=1000
-
+var progressbar="eka"
 dexie.version(1).stores({
-    friends: '++id,name,shoeSize,blob',
+    friends: '++id,name,shoeSize,blob,toka',
      
 });
  
@@ -44,13 +44,15 @@ jQuery(document).ready(function () {
                 $('#tallenna').click()
                   console.log('pysähtyi')
                 },tallennusaika)
-                var progressbar="eka"
+                 
                 const elem = document.getElementById(progressbar);
                 let width = 0;
                 const id = setInterval(() => {
                   if (width >= 100) {
                     clearInterval(id);
                     document.querySelector('#tallenna').textContent="toka"
+                    $('#tallenna').attr('')
+                    progressbar= (progressbar=="eka") ? "toka" : "eka"
                   } else {
                     const timeTOStopInSec = 1;
                     width += 1 / timeTOStopInSec;
@@ -75,11 +77,11 @@ jQuery(document).ready(function () {
                  // Export the WAV file
                  myRecorder.objects.recorder.exportWAV(function (blob) {
 
-                     BLOB=blob
+                     if (progressbar=="eka") BLOB=blob
                      var url = (window.URL || window.webkitURL)
                              .createObjectURL(blob);
-
-                    dexie.friends.put({blob: blob}).then (function(){     
+                    console.log('tallentaa')
+                    if (progressbar=="toka") dexie.friends.put({blob: blob,toka: BLOB}).then (function(){     
                                 //
                                 // Then when data is stored, read from it
                                 //
@@ -242,11 +244,24 @@ function listaaTallenteet2 () {
         //liHelper.innerHTML=key
        
         buttonHelper=document.createElement('button')
-        var link = document.createTextNode(keyy.id+'joo'); 
+        var link = document.createTextNode(keyy.id); 
         buttonHelper.appendChild(link); 
         buttonHelper.onclick=function () {soita (keyy.blob)}
         buttonHelper.classList.add("mystyle");
         ulRecords.appendChild(buttonHelper)
+
+
+        buttonHelper2=document.createElement('button')
+        var link2 = document.createTextNode(keyy.id); 
+        buttonHelper2.appendChild(link2); 
+        buttonHelper2.onclick=function () {soita (keyy.toka)}
+        buttonHelper.classList.add("mystyle");
+        ulRecords.appendChild(buttonHelper2)
+
+
+
+
+
        
        // liHelper.append(aHelper)
         console.log('228')
