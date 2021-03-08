@@ -10,9 +10,9 @@ dexie.version(1).stores({
 });
  
 
-var BLOB
+ 
 const mediat = []
-let  audioFile,records=[],tallenteita
+let  audioFile,records=[],tallenteita,BLOB
 const apu = document.querySelector('#apu')
 jQuery(document).ready(function () {
  var $ = jQuery;
@@ -77,16 +77,16 @@ jQuery(document).ready(function () {
                  // Export the WAV file
                  myRecorder.objects.recorder.exportWAV(function (blob) {
 
-                     if (progressbar=="eka") BLOB=blob
+                     if (progressbar=="eka") {BLOB=blob;soita(BLOB)}
                      var url = (window.URL || window.webkitURL)
                              .createObjectURL(blob);
                     console.log('tallentaa')
-                    if (progressbar=="toka") dexie.friends.put({blob: blob,toka: BLOB}).then (function(){     
+                    if (progressbar=="toka") dexie.friends.put({blob: BLOB,toka: blob}).then (function(){     
                                 //
                                 // Then when data is stored, read from it
                                 //
                                 //return dexie.friends.get('Nicolas');
-                                console.log('blobk added')
+                                console.log('blobk added');soita(blob)
                     }).catch( e=> {console.log(e);alert('Dexi alert '+e)}
                     )
      //debugger
