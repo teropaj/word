@@ -2,7 +2,7 @@
 let db=new Localbase()
 var dexie = new Dexie("friend_database");
 var recording=false
-var tallennusaika=1000
+var tallennusaika=2000
 var progressbar="eka"
 dexie.version(1).stores({
     friends: '++id,name,shoeSize,blob,toka',
@@ -17,48 +17,48 @@ const apu = document.querySelector('#apu')
 jQuery(document).ready(function () {
  var $ = jQuery;
  
- var myRecorder = {
-     objects: {
-         context: null,
-         stream: null,
-         recorder: null
-     },
-     init: function () {
-         if (null === myRecorder.objects.context) {
-             myRecorder.objects.context = new (
-                     window.AudioContext || window.webkitAudioContext
-                     );
-//				debugger			
-         }
-     },
-     start: function () {
-         var options = {audio: true, video: false};
-         navigator.mediaDevices.getUserMedia(options).then(function (stream) {
-             myRecorder.objects.stream = stream;
-             myRecorder.objects.recorder = new Recorder(
-                     myRecorder.objects.context.createMediaStreamSource(stream),
-                     {numChannels: 1}
-             );
-             myRecorder.objects.recorder.record();
-             setTimeout(function () {
-                $('#tallenna').click()
-                  console.log('pysähtyi')
-                },tallennusaika)
+//  var myRecorder = {
+//      objects: {
+//          context: null,
+//          stream: null,
+//          recorder: null
+//      },
+//      init: function () {
+//          if (null === myRecorder.objects.context) {
+//              myRecorder.objects.context = new (
+//                      window.AudioContext || window.webkitAudioContext
+//                      );
+// //				debugger			
+//          }
+//      },
+//      start: function () {
+//          var options = {audio: true, video: false};
+//          navigator.mediaDevices.getUserMedia(options).then(function (stream) {
+//              myRecorder.objects.stream = stream;
+//              myRecorder.objects.recorder = new Recorder(
+//                      myRecorder.objects.context.createMediaStreamSource(stream),
+//                      {numChannels: 1}
+//              );
+//              myRecorder.objects.recorder.record();
+            //  setTimeout(function () {
+            //     $('#tallenna').click()
+            //       console.log('pysähtyi')
+            //     },tallennusaika)
                  
-                const elem = document.getElementById(progressbar);
-                let width = 0;
-                const id = setInterval(() => {
-                  if (width >= 100) {
-                    clearInterval(id);
-                    document.querySelector('#tallenna').textContent="toka"
-                    $('#tallenna').attr('')
-                    progressbar= (progressbar=="eka") ? "toka" : "eka"
-                  } else {
-                    const timeTOStopInSec = 1;
-                    width += 1 / timeTOStopInSec;
-                    elem.value = width;
-                  }
-                }, 10);
+            //     const elem = document.getElementById(progressbar);
+            //     let width = 0;
+            //     const id = setInterval(() => {
+            //       if (width >= 100) {
+            //         clearInterval(id);
+            //         document.querySelector('#tallenna').textContent="toka"
+            //         $('#tallenna').attr('')
+            //         progressbar= (progressbar=="eka") ? "toka" : "eka"
+            //       } else {
+            //         const timeTOStopInSec = tallennusaika/1000;
+            //         width += 1 / timeTOStopInSec;
+            //         elem.value = width;
+            //       }
+            //     }, 10);
 
 
          }).catch(function (err) {});
@@ -151,7 +151,7 @@ jQuery(document).ready(function () {
 
 
  // Prepare the record button
- $('[data-role="controls"] > button').click(tallenna)
+ 
  $('#tallenna').click(tallenna)
      
  function tallenna() {
@@ -159,7 +159,7 @@ jQuery(document).ready(function () {
      myRecorder.init();
 
      // Get the button state 
-     var buttonState = !!$(this).attr('data-recording');
+      
 
      // Toggle
      if (!buttonState) {

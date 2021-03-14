@@ -5,6 +5,7 @@
         <title>Audio Recorder</title>
         <!-- <link rel="icon" type="image/png" href="https://stephino.github.io/dist/favicon.png" /> -->
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="styles.css">
         <style type="text/css">
 
@@ -109,22 +110,26 @@
         </script>
     </head>
     <body>
-        <div class="holder">
+        <!-- <div class="holder">
             <div data-role="controls">
                 <button style="border-radius: 50%;">Record</button>
             </div>
             <div data-role="recordings"></div>
-        </div>
-        <div style="display:grid;background-color: green; margin: 10%">
+        </div> -->
+        
+        <div id="vihreatausta">
+             
             <div style="align-content: center; width: 80%;margin-left: auto;margin-right: auto;" >
+                <h1>Sanakoetreeni</h1>
                  <p style="text-align: center;">First</p> 
-                 <button id="tallenna"   style="background-color: red;border-radius: 10%;width:100%;height: 50%;margin:0 auto;
-                 display:block;margin-bottom: 50%;">eka </button>
+                 <!-- <button id="tallenna"   style="background-color: red;border-radius: 10%;width:100%;height: 50%;margin:0 auto;
+                 display:block;margin-bottom: 50%;">eka </button> -->
+                 <button class="recbuttonclass" id="tallenna"> </button>
             </div>
              
              
             <div id="ulList" class="btn-group">
-                 <div style="box-sizing: border-box;">
+                 <!-- <div style="box-sizing: border-box;">
                     <label style="float: left;
                     width: 25%;"for="file">Eka</label>
                     <progress style="width: 70%;"   id="eka" value="0" max="100"> 32% </progress>
@@ -134,22 +139,27 @@
                     <label style="float: left;
                     width: 25%;"for="file">Toka</label>
                     <progress id="toka" style="width: 70%;" value="0" max="100"> 32% </progress>
-                </div>
+                </div> -->
                  
             </div>
-               
+               <button id="testi">play</button>
         </div>
-        <button onclick="clearLocalStorage()">tyhjennä muisti</button>   
+        <!-- <button onclick="clearLocalStorage()">tyhjennä muisti</button>   
         <button onclick="getBlob()">audio</button> 
-        <p id="apu">apu</p>
+         
+        <p id="apu">apu</p> -->
 
          
         
         <script src="dataURItoBlob.js"></script>
         <script src="localbase.js"></script>
-        <script src="koodi.js"></script>
+        <!-- <script src="koodi.js"></script> -->
         <!-- <script src="/node_modules/dexie-export-import/dist/dexie-export-import.js"></script> -->
-            
+        <script src="koodi2.js"></script>
+        <button class='button play'>play</button>
+ 
+ 
+
     </body>
 </html>
  
