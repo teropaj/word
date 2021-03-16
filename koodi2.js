@@ -1,12 +1,19 @@
-const audioChunks = []
-let tallentaa=false,records=[];
+let audioChunks = []
+let tallentaa=false,records=[],iseka=true;
 let dexie = new Dexie("friend_database");
+let dashboard=$('#dashboard')
 ulRecords=document.querySelector('#ulList')
 
 dexie.version(1).stores({
     friends: '++id,name,shoeSize,blob,toka',
      
 });
+
+if (null === myRecorder.objects.context) {
+  myRecorder.objects.context = new (
+          window.AudioContext || window.webkitAudioContext
+          );
+}
 
 navigator.mediaDevices.getUserMedia({ audio: true })
 .then(stream => {
@@ -22,14 +29,28 @@ mediaRecorder.addEventListener("dataavailable", event => {
  
 mediaRecorder.addEventListener("stop", () => {
   
+  //let tallennettava=audioChunks[audioChunks.length-1]
   const audioBlob = new Blob(audioChunks);
+  audioChunks=[]
   const audioUrl = URL.createObjectURL(audioBlob);
   const audio = new Audio(audioUrl);
   audio.controls=true
   audio.src=audioUrl
-  //document.body.appendChild(audio)
+  dashboard.append(audio)
   audio.play();
   console.log(audioChunks)
+
+  /*
+  dexie.friends.put({blob: BLOB,toka: blob}).then (function(){     
+                                //
+                                // Then when data is stored, read from it
+                                //
+                                //return dexie.friends.get('Nicolas');
+                                console.log('blobk added');soita(blob)
+                    }).catch( e=> {console.log(e);alert('Dexi alert '+e)}
+                    )
+  */
+   
 });
  
 
@@ -108,8 +129,23 @@ function listaaTallenteet2 () {
         ulRecords.append(liHelper)
         console.log('lop')
         //lisaaLog(ulRecords)
+
+        teeX ()
        }
 }
+
+function teeX () {
+  buttonHelper2=document.createElement('button')
+        var link2 = document.createTextNode('X')
+        buttonHelper2.appendChild(link2); 
+        buttonHelper2.onclick=function () {soita (keyy.toka)}
+        //buttonHelper2.classList.add("button");
+        buttonHelper2.classList.add("xtyyli");
+
+        ulRecords.appendChild(buttonHelper2)
+
+}
+
 
 $('#tallenna').addClass("notRec");
 
