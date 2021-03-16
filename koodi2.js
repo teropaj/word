@@ -8,75 +8,81 @@ dexie.version(1).stores({
     friends: '++id,name,shoeSize,blob,toka',
      
 });
-
-if (null === myRecorder.objects.context) {
-  myRecorder.objects.context = new (
-          window.AudioContext || window.webkitAudioContext
-          );
-}
+ 
 
 navigator.mediaDevices.getUserMedia({ audio: true })
 .then(stream => {
-const mediaRecorder = new MediaRecorder(stream);
+ 
 const stopButton = document.querySelector('#tallenna')
 stopButton.innerText='eka'
 let ekaTallennus,tokaTallennus
 
  
-mediaRecorder.addEventListener("dataavailable", event => {
-  audioChunks.push(event.data);
-});
  
-mediaRecorder.addEventListener("stop", () => {
+// mediaRecorder.addEventListener("stop", () => {
   
-  //let tallennettava=audioChunks[audioChunks.length-1]
-  const audioBlob = new Blob(audioChunks);
-  audioChunks=[]
-  const audioUrl = URL.createObjectURL(audioBlob);
-  const audio = new Audio(audioUrl);
-  audio.controls=true
-  audio.src=audioUrl
-  dashboard.append(audio)
-  audio.play();
-  console.log(audioChunks)
+//   //let tallennettava=audioChunks[audioChunks.length-1]
+//   const audioBlob = new Blob(audioChunks);
+//   audioChunks=[]
+//   const audioUrl = URL.createObjectURL(audioBlob);
+//   const audio = new Audio(audioUrl);
+//   audio.controls=true
+//   audio.src=audioUrl
+//   dashboard.append(audio)
+//   audio.play();
+//   console.log(audioChunks)
 
-  /*
-  dexie.friends.put({blob: BLOB,toka: blob}).then (function(){     
-                                //
-                                // Then when data is stored, read from it
-                                //
-                                //return dexie.friends.get('Nicolas');
-                                console.log('blobk added');soita(blob)
-                    }).catch( e=> {console.log(e);alert('Dexi alert '+e)}
-                    )
-  */
+//   /*
+//   dexie.friends.put({blob: BLOB,toka: blob}).then (function(){     
+//                                 //
+//                                 // Then when data is stored, read from it
+//                                 //
+//                                 //return dexie.friends.get('Nicolas');
+//                                 console.log('blobk added');soita(blob)
+//                     }).catch( e=> {console.log(e);alert('Dexi alert '+e)}
+//                     )
+//   */
    
-});
+// });
  
 
 stopButton.addEventListener('click', () => {
-    if (tallentaa)  {mediaRecorder.stop();tallentaa=false} 
-    else { mediaRecorder.start();tallentaa=true;stopButton.innerText="tallentaa"}
-})
-
-$('#tallenna').click(function(){
-  console.log('recbutton')
-   
-   
-
+  myRecorder.init()
   muuta()
-  
-  setTimeout(()=>{
+
+    setTimeout(()=>{
     muuta()
     //document.getElementById('tallenna').style.backgroundColor='darkred'
     // setTimeout(()=>muuta(),2000)  
-    if (tallentaa)  {mediaRecorder.stop();tallentaa=false} 
-    else { mediaRecorder.start();tallentaa=true;stopButton.innerText="tallentaa"}
+    if (tallentaa)  {myRecorder.stop();tallentaa=false} 
+    else { myRecorder.start();tallentaa=true;stopButton.innerText="tallentaa"}
   
   }
   ,2000)
+
+
+    if (tallentaa)  {myRecorder.stop();tallentaa=false} 
+    else { myRecorder.start();tallentaa=true;stopButton.innerText="tallentaa"}
+})
+
+// $('#tallenna').click(function(){
+//   console.log('recbutton')
    
-});	
+//    myRecorder.init()
+
+//   muuta()
+  
+//   setTimeout(()=>{
+//     muuta()
+//     //document.getElementById('tallenna').style.backgroundColor='darkred'
+//     // setTimeout(()=>muuta(),2000)  
+//     if (tallentaa)  {myRecorder.stop();tallentaa=false} 
+//     else { myRecorder.start();tallentaa=true;stopButton.innerText="tallentaa"}
+  
+//   }
+//   ,2000)
+   
+// });	
 
 });
 
@@ -170,12 +176,76 @@ $('#tallenna').addClass("notRec");
 
 
 function muuta() {
-  if($('#tallenna').hasClass('notRec')){
-  $('#tallenna').removeClass("notRec");
-  $('#tallenna').addClass("Rec");
+  if(document.querySelector('#tallenna').classList.contains('notRec')){
+  document.querySelector('#tallenna').classList.remove("notRec");
+  document.querySelector('#tallenna').classList.add("Rec");
 }
 else{
-  $('#tallenna').removeClass("Rec");
-  $('#tallenna').addClass("notRec");
+  document.querySelector('#tallenna').classList.remove("Rec");
+  document.querySelector('#tallenna').classList.add("notRec");
 }
 }
+
+var myRecorder = {
+  objects: {
+      context: null,
+      stream: null,
+      recorder: null
+  },
+  init: function () {
+      if (null === myRecorder.objects.context) {
+          myRecorder.objects.context = new (
+                  window.AudioContext || window.webkitAudioContext
+                  );
+      }
+  },
+  start: function () {
+      var options = {audio: true, video: false};
+      navigator.mediaDevices.getUserMedia(options).then(function (stream) {
+          myRecorder.objects.stream = stream;
+          myRecorder.objects.recorder = new Recorder(
+                  myRecorder.objects.context.createMediaStreamSource(stream),
+                  {numChannels: 1}
+          );
+          myRecorder.objects.recorder.record();
+      }).catch(function (err) {});
+  },
+  stop: function (listObject) {
+      if (null !== myRecorder.objects.stream) {
+          myRecorder.objects.stream.getAudioTracks()[0].stop();
+      }
+      if (null !== myRecorder.objects.recorder) {
+          myRecorder.objects.recorder.stop();
+
+          // Validate object
+          // if (null !== listObject
+          //         && 'object' === typeof listObject
+          //         && listObject.length > 0)
+                   {
+              // Export the WAV file
+              myRecorder.objects.recorder.exportWAV(function (blob) {
+                  var url = (window.URL || window.webkitURL)
+                          .createObjectURL(blob);
+
+                  // Prepare the playback
+                  var audioObject = $('<audio controls></audio>')
+                          .attr('src', url);
+
+                  // Prepare the download link
+                  // var downloadObject = $('<a>&#9660;</a>')
+                  //         .attr('href', url)
+                  //         .attr('download', new Date().toUTCString() + '.wav');
+
+                  // Wrap everything in a row
+                  var holderObject = $('<div class="row"></div>')
+                          .append(audioObject)
+                    //      .append(downloadObject);
+
+                  // Append to the list
+                  ulRecords.append(audioObject);
+              });
+          }
+      }
+  }
+};
+ 
