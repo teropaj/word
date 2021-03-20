@@ -1,9 +1,9 @@
-let audioChunks = []
+let audioChunks = [],audioObjects = []
 let tallentaa=false,records=[],iseka=true;
 let dexie = new Dexie("friend_database");
 let dashboard=$('#dashboard')
 ulRecords=document.querySelector('#ulList')
-
+ 
 dexie.version(1).stores({
     friends: '++id,name,shoeSize,blob,toka',
      
@@ -186,6 +186,35 @@ else{
 }
 }
 
+function createButton (blob) {
+  var url = (window.URL || window.webkitURL)
+                          .createObjectURL(blob);
+
+                  // Prepare the playback
+                  var audioObject = document.createElement('audio')
+                  //audioObject.controls=true
+                  audioObject.src=url
+                  const play =document.createElement('button')
+                  play.textContent="►"
+                  play.addEventListener('click',function () {audioObject.play()})
+                   
+                  // Prepare the download link
+                  // var downloadObject = $('<a>&#9660;</a>')
+                  //         .attr('href', url)
+                  //         .attr('download', new Date().toUTCString() + '.wav');
+
+                  // Wrap everything in a row
+                  //var holderObject = $('<div class="row"></div>')
+                    //      .append(audioObject)
+                    //      .append(downloadObject);
+
+                  // Append to the list
+                  ulRecords.append(play);
+                  ulRecords.append(audioObject)
+}
+
+
+
 var myRecorder = {
   objects: {
       context: null,
@@ -224,25 +253,29 @@ var myRecorder = {
                    {
               // Export the WAV file
               myRecorder.objects.recorder.exportWAV(function (blob) {
-                  var url = (window.URL || window.webkitURL)
-                          .createObjectURL(blob);
+                  // var url = (window.URL || window.webkitURL)
+                  //         .createObjectURL(blob);
 
-                  // Prepare the playback
-                  var audioObject = $('<audio controls></audio>')
-                          .attr('src', url);
+                  // // Prepare the playback
+                  // var audioObject = document.createElement('audio')
+                  // //audioObject.controls=true
+                  // audioObject.src=url
+                  // const play =document.createElement('button')
+                  // play.textContent="►"
 
-                  // Prepare the download link
-                  // var downloadObject = $('<a>&#9660;</a>')
-                  //         .attr('href', url)
-                  //         .attr('download', new Date().toUTCString() + '.wav');
+                  // // Prepare the download link
+                  // // var downloadObject = $('<a>&#9660;</a>')
+                  // //         .attr('href', url)
+                  // //         .attr('download', new Date().toUTCString() + '.wav');
 
-                  // Wrap everything in a row
-                  var holderObject = $('<div class="row"></div>')
-                          .append(audioObject)
-                    //      .append(downloadObject);
+                  // // Wrap everything in a row
+                  // //var holderObject = $('<div class="row"></div>')
+                  //   //      .append(audioObject)
+                  //   //      .append(downloadObject);
 
-                  // Append to the list
-                  ulRecords.append(audioObject);
+                  // // Append to the list
+                  // ulRecords.append(play);
+                  createButton(blob)
               });
           }
       }
