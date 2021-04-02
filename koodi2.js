@@ -185,7 +185,8 @@ else{
   document.querySelector('#tallenna').classList.add("notRec");
 }
 }
-
+document.querySelector('#vihreatausta').addEventListener('click',
+(e)=>{console.log(e);console.log('hei')})
 function createButton (blob) {
   var url = (window.URL || window.webkitURL)
                           .createObjectURL(blob);
@@ -194,23 +195,50 @@ function createButton (blob) {
                   var audioObject = document.createElement('audio')
                   //audioObject.controls=true
                   audioObject.src=url
-                  const play =document.createElement('button')
-                  play.textContent="►"
-                  play.addEventListener('click',function () {audioObject.play()})
-                   
-                  // Prepare the download link
-                  // var downloadObject = $('<a>&#9660;</a>')
-                  //         .attr('href', url)
-                  //         .attr('download', new Date().toUTCString() + '.wav');
 
-                  // Wrap everything in a row
-                  //var holderObject = $('<div class="row"></div>')
-                    //      .append(audioObject)
-                    //      .append(downloadObject);
 
-                  // Append to the list
-                  ulRecords.append(play);
-                  ulRecords.append(audioObject)
+                  if (iseka) {
+                      const play =document.createElement('button')
+                      const rivi = document.createElement('div')
+                      rivi.style.display="flex";
+                      rivi.style.width="100%"
+                      play.classList.add('playButton')
+                      play.textContent="►"
+                      play.addEventListener('click',function () {audioObject.play()})
+                      
+                      const play2 =document.createElement('button')
+                      play2.classList.add('playButton')
+                      
+                      const deleteButton =document.createElement('button')
+                      deleteButton.classList.add('deleteButton')
+                      deleteButton.textContent="X"
+                      // Prepare the download link
+                      // var downloadObject = $('<a>&#9660;</a>')
+                      //         .attr('href', url)
+                      //         .attr('download', new Date().toUTCString() + '.wav');
+
+                      // Wrap everything in a row
+                      //var holderObject = $('<div class="row"></div>')
+                        //      .append(audioObject)
+                        //      .append(downloadObject);
+
+                      // Append to the list
+                      rivi.append(play);
+                      rivi.append(play2);
+                      rivi.append(deleteButton);
+                      rivi.append(audioObject)
+                      ulRecords.appendChild(rivi)
+                      iseka=false
+                  }
+                  else {
+                    len=document.querySelectorAll('.playButton').length
+                    let play2=document.querySelectorAll('.playButton')[len-1]
+                    play2.textContent="►"
+                    play2.addEventListener('click',function () {audioObject.play()})
+
+                    console.log('test')
+                    iseka=true
+                  }
 }
 
 
