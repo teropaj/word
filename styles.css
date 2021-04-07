@@ -6,6 +6,7 @@
 .btn-group {padding-top: 3%;}
 
 /* #ulList {display: flex;} */
+.reunat {border: 2px solid red;}
 
 .playButton {
     background-color: #4CAF50; /* Green background */
@@ -13,7 +14,7 @@
     color: white; /* White text */
     /* padding: 10px 24px; Some padding */
     cursor: pointer; /* Pointer/hand icon */
-    width: 45%; /* Set a width if needed */
+    width: 40%; /* Set a width if needed */
    /*display: block;   Make the buttons appear below each other */
      
   }
@@ -21,7 +22,7 @@
   
    /* {
     border-bottom: none; /* Prevent double borders */
-  }.btn-group button:not(:last-child) */
+  .btn-group button:not(:last-child) */
   
   /* Add a background color on hover */
   .btn-group button:hover {
@@ -93,10 +94,10 @@ border-color: transparent transparent transparent #202020;
 }
 
 #vihreatausta {
-    
-    background-color: green;
+    padding-top: 5%;
+    /* background-color: green; */
     margin: auto;
-    width: 50%;
+    width: 80%;
  
 }
 
@@ -107,9 +108,9 @@ body {
 .mobile-container {
   max-width: 480px;
   margin: auto;
-  background-color: #555;
-  height: 500px;
-  color: white;
+  /* background-color: #555; */
+  /* height: 500px; */
+  /* color: white; */
   border-radius: 10px;
 }
 
@@ -117,6 +118,7 @@ body {
   overflow: hidden;
   background-color: #333;
   position: relative;
+  display: flex;
 }
 
 .topnav #myLinks {
@@ -132,11 +134,12 @@ body {
 }
 
 .topnav a.icon {
-  background: black;
+  /* background: black; */
   display: block;
   position: absolute;
   right: 0;
   top: 0;
+  color:white
 }
 
 .topnav a:hover {
@@ -147,4 +150,36 @@ body {
 .active {
   background-color: #4CAF50;
   color: white;
+}
+
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+      font-size: 14px;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ .fa-bars{
+  content: "\f0c9";
+}
+
+.hamburger {
+  width: 3em;
+  height: 0.5em;
+  background-color: black;
+  margin: 0.2em auto;
+}
+
+@media only screen and (min-width: 600px) {
+  .topnav {
+    overflow: hidden;
+    background-color: #333;
+    position: relative;
+    display: flex;
+    margin:auto;
+    width: 60%;
+  }
 }

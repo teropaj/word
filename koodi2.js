@@ -1,9 +1,10 @@
-let audioChunks = [],audioObjects = []
+let audioChunks = [],audioObjects = [],playList = [],checked = [] 
 let tallentaa=false,records=[],iseka=true;
-let dexie = new Dexie("friend_database");
-let dashboard=$('#dashboard')
+let dexie = new Dexie("friend_database");koeId=null
+let dashboard=$('#dashboard'),koeTimer,valitutLkm
 ulRecords=document.querySelector('#ulList')
- 
+let koe=document.querySelector('#koe')
+let isKoe=false,soitetaan,riviId=0
 dexie.version(1).stores({
     friends: '++id,name,shoeSize,blob,toka',
      
@@ -151,6 +152,9 @@ function teeX () {
         ulRecords.appendChild(buttonHelper2)
 
 }
+function delEvent (e ) {
+  e.currentTarget.parentElement.remove()
+}
 
 
 $('#tallenna').addClass("notRec");
@@ -186,7 +190,66 @@ else{
 }
 }
 document.querySelector('#vihreatausta').addEventListener('click',
-(e)=>{console.log(e);console.log('hei')})
+(e)=>{console.log(e);console.log('hei');
+let valitut
+ 
+if (e.target.id==="koe") {    
+  isKoe=!isKoe
+   
+  haeValitut = function () {console.log('koe')
+      valitut=document.querySelectorAll('#ulList div')
+      for (let rivi=0;valitut.length>rivi;rivi++) {if (valitut[rivi].children[2].checked==true) 
+         
+        checked.push(valitut[rivi].id)}
+      //debugger
+
+      valitutLkm=checked.length
+      while (isKoe) {
+        if (koeId===null) koeId=valitut[0].id
+         
+          rivi=document.getElementById(koeId)
+          debugger
+          rivi.classList.add('reunat')
+          soita(rivi)
+          setTimeout(()=>haeValitut(),2300)
+      }
+      for (let rivi of checked) {
+        koeTimer=setTimeout(function () {soita(rivi)}, 2300)
+      }
+      function soita (rivi) {rivi.children[0].click()}
+      if (valitut.length>0) document.getElementById('lopetaKoe').style.display=""
+      if (isKoe) haeValitut()
+  }
+  if (isKoe) haeValitut()
+  
+}
+    
+      
+    let id=e.target.parentElement.id+''
+     if(e.target.type==='checkbox'){
+      
+     //let divList=document.querySelectorAll('div')
+     listaa= function () {if (e.target.checked==true) playList.push(e.target.parentElement)}
+      //document.querySelectorAll('#ulList div')
+     if (e.target.checked==true) listaa() //playList.push(e.target.parentElement.children[0])
+
+      
+
+      
+     
+     
+      
+
+       
+       
+       
+       
+     }
+      
+    
+    })   //koenappula loppuu
+
+
 function createButton (blob) {
   var url = (window.URL || window.webkitURL)
                           .createObjectURL(blob);
@@ -200,6 +263,8 @@ function createButton (blob) {
                   if (iseka) {
                       const play =document.createElement('button')
                       const rivi = document.createElement('div')
+                      rivi.id='rivi'+Date.now()
+                      
                       rivi.style.display="flex";
                       rivi.style.width="100%"
                       play.classList.add('playButton')
@@ -212,6 +277,7 @@ function createButton (blob) {
                       const deleteButton =document.createElement('button')
                       deleteButton.classList.add('deleteButton')
                       deleteButton.textContent="X"
+                      deleteButton.addEventListener('click', delEvent)
                       // Prepare the download link
                       // var downloadObject = $('<a>&#9660;</a>')
                       //         .attr('href', url)
@@ -223,10 +289,19 @@ function createButton (blob) {
                         //      .append(downloadObject);
 
                       // Append to the list
+                      radio=document.createElement('input')
+                      radio.type="checkbox"
+                      
+
+                       
+
                       rivi.append(play);
                       rivi.append(play2);
+                      rivi.append(radio)
                       rivi.append(deleteButton);
                       rivi.append(audioObject)
+                      
+                       
                       ulRecords.appendChild(rivi)
                       iseka=false
                   }
