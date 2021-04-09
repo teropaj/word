@@ -1,7 +1,7 @@
 let audioChunks = [],audioObjects = [],playList = [],checked = [] 
 let tallentaa=false,records=[],iseka=true;
 let dexie = new Dexie("friend_database");koeId=null
-let dashboard=$('#dashboard'),koeTimer,valitutLkm
+let dashboard=$('#dashboard'),koeTimer,valitutLkm,rivi
 ulRecords=document.querySelector('#ulList')
 let koe=document.querySelector('#koe')
 let isKoe=false,soitetaan,riviId=0
@@ -194,11 +194,12 @@ else{
 document.querySelector('#vihreatausta').addEventListener('click',
 (e)=>{console.log(e);console.log('hei');
  
-if (e.target.id==="lopetaKoe") clearTimeout(t)
+if (e.target.id==="lopetaKoe") {clearTimeout(t);isKoe=false;koeId=null}
 if (e.target.id==="koe") {    
-  isKoe=!isKoe
+  isKoe=true
   haeValitut()
   haeValitut = function () {console.log('koe')
+      if (isKoe===false) return
       valitut=document.querySelectorAll('#ulList div')
       checked = []
       for (let rivi=0;valitut.length>rivi;rivi++) {
@@ -211,10 +212,11 @@ if (e.target.id==="koe") {
 
       valitutLkm=checked.length
       //while (isKoe) {
-        if (koeId===null) koeId=valitut[0].id
-        else {koeId=checked.indexOf(koeId+1);
-              if (koeId>checked.length) koeId=checked[0]}
-          rivi=document.getElementById(koeId)
+        if (koeId===null) koeId=checked[0]
+        else {koeId=checked[checked.indexOf(koeId)+1];
+              if (checked.indexOf(koeId)>checked.length) koeId=checked[0]}
+        rivi=document.getElementById(koeId)
+        if (rivi===null) debugger//alert('rivi on null')
            
           rivi.classList.add('reunat')
           soita(rivi)
@@ -225,7 +227,8 @@ if (e.target.id==="koe") {
       // }
       function soita (rivi) {rivi.children[0].click()}
       if (valitut.length>0) document.getElementById('lopetaKoe').style.display=""
-      if (isKoe) t=setTimeout(()=>haeValitut(),2200)    
+      //if (isKoe) t=setTimeout(()=>haeValitut(),2200)    
+      
   }
     
   
