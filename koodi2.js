@@ -5,6 +5,8 @@ let dashboard=$('#dashboard'),koeTimer,valitutLkm
 ulRecords=document.querySelector('#ulList')
 let koe=document.querySelector('#koe')
 let isKoe=false,soitetaan,riviId=0
+let valitut
+haeValitut = function () {}
 dexie.version(1).stores({
     friends: '++id,name,shoeSize,blob,toka',
      
@@ -191,36 +193,41 @@ else{
 }
 document.querySelector('#vihreatausta').addEventListener('click',
 (e)=>{console.log(e);console.log('hei');
-let valitut
  
+if (e.target.id==="lopetaKoe") clearTimeout(t)
 if (e.target.id==="koe") {    
   isKoe=!isKoe
-   
+  haeValitut()
   haeValitut = function () {console.log('koe')
       valitut=document.querySelectorAll('#ulList div')
-      for (let rivi=0;valitut.length>rivi;rivi++) {if (valitut[rivi].children[2].checked==true) 
+      checked = []
+      for (let rivi=0;valitut.length>rivi;rivi++) {
+        if (valitut[rivi].children[2].checked==true) checked.push(valitut[rivi].id)
+        
+      }
          
-        checked.push(valitut[rivi].id)}
+       
       //debugger
 
       valitutLkm=checked.length
-      while (isKoe) {
+      //while (isKoe) {
         if (koeId===null) koeId=valitut[0].id
-         
+        else {koeId=checked.indexOf(koeId+1);
+              if (koeId>checked.length) koeId=checked[0]}
           rivi=document.getElementById(koeId)
-          debugger
+           
           rivi.classList.add('reunat')
           soita(rivi)
-          setTimeout(()=>haeValitut(),2300)
-      }
-      for (let rivi of checked) {
-        koeTimer=setTimeout(function () {soita(rivi)}, 2300)
-      }
+          t=setTimeout(()=>{rivi.classList.remove('reunat');haeValitut()},2300)
+      //}
+      // for (let rivi of checked) {
+      //   koeTimer=setTimeout(function () {soita(rivi)}, 2300)
+      // }
       function soita (rivi) {rivi.children[0].click()}
       if (valitut.length>0) document.getElementById('lopetaKoe').style.display=""
-      if (isKoe) haeValitut()
+      if (isKoe) t=setTimeout(()=>haeValitut(),2200)    
   }
-  if (isKoe) haeValitut()
+    
   
 }
     
@@ -313,6 +320,8 @@ function createButton (blob) {
 
                     console.log('test')
                     iseka=true
+                    if(document.querySelectorAll('#ulList div').length===2) document.querySelector('#koe').style.display=""
+                    console.log('joo')                  
                   }
 }
 
