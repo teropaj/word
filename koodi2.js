@@ -4,7 +4,7 @@ let dexie = new Dexie("friend_database");koeId=null
 let dashboard=$('#dashboard'),koeTimer,valitutLkm,rivi
 ulRecords=document.querySelector('#ulList')
 let koe=document.querySelector('#koe')
-let isKoe=false,soitetaan,riviId=0
+let isKoe=false,soitetaan,riviId=0;isLast=false
 let valitut
 haeValitut = function () {}
 dexie.version(1).stores({
@@ -199,7 +199,7 @@ if (e.target.id==="koe") {
   isKoe=true
   haeValitut()
   haeValitut = function () {console.log('koe')
-      if (isKoe===false) return
+      if (isKoe===false) {alert('isKoe on 0');return}
       valitut=document.querySelectorAll('#ulList div')
       checked = []
       for (let rivi=0;valitut.length>rivi;rivi++) {
@@ -210,17 +210,19 @@ if (e.target.id==="koe") {
        
       //debugger
 
-      valitutLkm=checked.length
+       
       //while (isKoe) {
         if (koeId===null) koeId=checked[0]
         else {koeId=checked[checked.indexOf(koeId)+1];
-              if (checked.indexOf(koeId)>checked.length) koeId=checked[0]}
+              if (checked.indexOf(koeId)===checked.length) koeId=checked[0]}
+        if(isLast===true) {isLast=false;koeId=checked[0]}              
         rivi=document.getElementById(koeId)
         if (rivi===null) debugger//alert('rivi on null')
            
           rivi.classList.add('reunat')
           soita(rivi)
-          t=setTimeout(()=>{rivi.classList.remove('reunat');haeValitut()},2300)
+          t=setTimeout(()=>{rivi.classList.remove('reunat');haeValitut()
+                        if (koeId===checked[checked.length-1]) isLast=true},2300)
       //}
       // for (let rivi of checked) {
       //   koeTimer=setTimeout(function () {soita(rivi)}, 2300)
