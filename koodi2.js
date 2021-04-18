@@ -1,14 +1,15 @@
 let audioChunks = [],audioObjects = [],playList = [],checked = [] 
 let tallentaa=false,records=[],iseka=true;
 let dexie = new Dexie("friend_database");koeId=null
-let dashboard=$('#dashboard'),koeTimer,valitutLkm,rivi
+let dashboard=$('#dashboard'),koeTimer,valitutLkm,rivi,ekaBlob
 ulRecords=document.querySelector('#ulList')
 let koe=document.querySelector('#koe')
 let isKoe=false,soitetaan,riviId=0;isLast=false
 let valitut
+var audioObject = document.createElement('audio')
 haeValitut = function () {}
 dexie.version(1).stores({
-    friends: '++id,name,shoeSize,blob,toka',
+    friends: '++id,eka,toka',
      
 });
  
@@ -263,18 +264,18 @@ if (e.target.id==="koe") {
 
 
 function createButton (blob) {
-  var url = (window.URL || window.webkitURL)
+                  var url = (window.URL || window.webkitURL)
                           .createObjectURL(blob);
 
                   // Prepare the playback
-                  var audioObject = document.createElement('audio')
+                  //var audioObject = document.createElement('audio')
                   //audioObject.controls=true
                   audioObject.src=url
 
 
                   if (iseka) {
                       const play =document.createElement('button')
-                      const rivi = document.createElement('div')
+                      rivi = document.createElement('div')
                       rivi.id='rivi'+Date.now()
                       
                       rivi.style.display="flex";
@@ -313,7 +314,7 @@ function createButton (blob) {
                       rivi.append(deleteButton);
                       rivi.append(audioObject)
                       
-                       
+                      ekaBlob=blob
                       ulRecords.appendChild(rivi)
                       iseka=false
                   }
@@ -326,7 +327,8 @@ function createButton (blob) {
                     console.log('test')
                     iseka=true
                     if(document.querySelectorAll('#ulList div').length===2) document.querySelector('#koe').style.display=""
-                    console.log('joo')                  
+                    console.log('joo')           
+                    dexie.friends.put({eka:ekaBlob,toka:blob,id:rivi.id})
                   }
 }
 
@@ -398,4 +400,50 @@ var myRecorder = {
       }
   }
 };
+
+
+function teeRivi () {
+  const play =document.createElement('button')
+  rivi = document.createElement('div')
+  rivi.id='rivi'+Date.now()
+  
+  rivi.style.display="flex";
+  rivi.style.width="100%"
+  play.classList.add('playButton')
+  play.textContent="►"
+  play.addEventListener('click',function () {audioObject.play()})
+  
+  const play2 =document.createElement('button')
+  play2.classList.add('playButton')
+  
+  const deleteButton =document.createElement('button')
+  deleteButton.classList.add('deleteButton')
+  deleteButton.textContent="X"
+  deleteButton.addEventListener('click', delEvent)
+  // Prepare the download link
+  // var downloadObject = $('<a>&#9660;</a>')
+  //         .attr('href', url)
+  //         .attr('download', new Date().toUTCString() + '.wav');
+
+  // Wrap everything in a row
+  //var holderObject = $('<div class="row"></div>')
+    //      .append(audioObject)
+    //      .append(downloadObject);
+
+  // Append to the list
+  radio=document.createElement('input')
+  radio.type="checkbox"
+  
+
+   
+
+  rivi.append(play);
+  rivi.append(play2);
+  rivi.append(radio)
+  rivi.append(deleteButton);
+  rivi.append(audioObject)
+  
+  //ekaBlob=blob
+  ulRecords.appendChild(rivi)
+}
  
